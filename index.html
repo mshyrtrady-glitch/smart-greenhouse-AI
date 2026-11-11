@@ -1,239 +1,402 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Greenhouse Edge-AI Dashboard</title>
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-green: #10b981;
-            --accent-red: #ef4444;
-            --accent-blue: #3b82f6;
-            --text-color: #f8fafc;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        h1 {
-            color: var(--accent-green);
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr; }
-        }
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-        .card h2 {
-            font-size: 18px;
-            margin-top: 0;
-            border-bottom: 2px solid #334155;
-            padding-bottom: 10px;
-        }
-        .control-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        input[type=range] {
-            width: 100%;
-            accent-color: var(--accent-green);
-        }
-        .value-display {
-            font-weight: bold;
-            color: var(--accent-blue);
-        }
-        .status-box {
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-weight: bold;
-            text-align: center;
-        }
-        .status-safe { background-color: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid var(--accent-green); }
-        .status-danger { background-color: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid var(--accent-red); }
-        .full-width {
-            grid-column: span 2;
-        }
-        @media (max-width: 768px) { .full-width { grid-column: span 1; } }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Greenhouse</title>
+  <link rel="manifest" href="./manifest.json">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #101820;
+      color: white;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    header h1 {
+      color: #4ade80;
+      margin-bottom: 10px;
+    }
+
+    .status {
+      margin: 15px auto;
+      padding: 10px;
+      background: #1e293b;
+      border-radius: 10px;
+      width: fit-content;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    .card h3 {
+      margin-bottom: 15px;
+      color: #94a3b8;
+    }
+
+    .value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #4ade80;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      margin-top: 15px;
+      accent-color: #4ade80;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    button {
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      background: #22c55e;
+      color: #102016;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #16a34a;
+    }
+
+    .panel {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+
+    .panel h2 {
+      color: #4ade80;
+      margin-bottom: 15px;
+    }
+
+    .device {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      background: #334155;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .on {
+      color: #4ade80;
+    }
+
+    .off {
+      color: #f87171;
+    }
+
+    #plantImage {
+      max-width: 100%;
+      max-height: 250px;
+      display: none;
+      margin-top: 15px;
+      border-radius: 10px;
+    }
+
+    #log {
+      max-height: 180px;
+      overflow-y: auto;
+      line-height: 1.8;
+      color: #cbd5e1;
+    }
+
+    .ai-result {
+      background: #334155;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      line-height: 1.8;
+    }
+
+    footer {
+      text-align: center;
+      color: #64748b;
+      margin-top: 30px;
+    }
+  </style>
 </head>
+
 <body>
 
+<header>
+  <h1>🌱 Smart Greenhouse</h1>
+  <p>نظام ذكي لمراقبة الصوبة الزراعية والتحكم فيها</p>
+  <div class="status" id="connectionStatus">
+    حالة الاتصال: Offline
+  </div>
+</header>
+
 <div class="container">
-    <header>
-        <h1>🌿 لوحة تحكم الصوبة الذكية (Edge AI & Cloud)</h1>
-        <p>مشروع ISEF - نظام المراقبة المحلية والتحليل الذكي</p>
-    </header>
 
-    <div class="grid">
-        <!-- لوحة التحكم وتغيير العوامل يدوياً للمحاكاة -->
-        <div class="card">
-            <h2>🎛️ محاكاة الحساسات (تحكم مباشر)</h2>
-            
-            <div class="control-group">
-                <label>درجة الحرارة: <span id="tempVal" class="value-display">28</span> °C</label>
-                <input type="range" id="tempRange" min="15" max="45" value="28" oninput="updateSystem()">
-            </div>
+  <section class="cards">
 
-            <div class="control-group">
-                <label>رطوبة التربة: <span id="soilVal" class="value-display">60</span> %</label>
-                <input type="range" id="soilRange" min="0" max="100" value="60" oninput="updateSystem()">
-            </div>
-
-            <div class="control-group">
-                <label>رطوبة الجو: <span id="humVal" class="value-display">55</span> %</label>
-                <input type="range" id="humRange" min="20" max="95" value="55" oninput="updateSystem()">
-            </div>
-        </div>
-
-        <!-- أجهزة التنفيذ الآلي (Actuators) -->
-        <div class="card">
-            <h2>⚙️ استجابة النظام الفورية (Edge Actions)</h2>
-            <div id="pumpStatus" class="status-box status-safe">مضخة المياه: متوقفة (التربة رطبة)</div>
-            <div id="fanStatus" class="status-box status-safe">مروحة التهوية: متوقفة (الحرارة طبيعية)</div>
-            <div id="cloudStatus" class="status-box status-safe" style="margin-top: 15px;">حالة الاتصال: متصل بالكلاود (Cloud Sync Active)</div>
-        </div>
-
-        <!-- تحليل أمراض النباتات بواسطة Edge AI -->
-        <div class="card full-width">
-            <h2>🤖 فحص الذكاء الاصطناعي المحلي (Edge AI Leaf Disease Detection)</h2>
-            <p>يقوم النموذج المحلي (TFLite) بفحص الصورة الحية للكاميرا واكتشاف الأمراض بدقة:</p>
-            <div id="aiDiseaseStatus" class="status-box status-safe" style="font-size: 16px;">
-                حالة النبات: سليمة 100% (Healthy - No Disease Detected)
-            </div>
-        </div>
+    <div class="card">
+      <h3>درجة الحرارة</h3>
+      <div class="value" id="temperature">28°C</div>
+      <input type="range" id="tempSlider" min="10" max="50" value="28">
     </div>
+
+    <div class="card">
+      <h3>رطوبة الهواء</h3>
+      <div class="value" id="airHumidity">60%</div>
+      <input type="range" id="airSlider" min="0" max="100" value="60">
+    </div>
+
+    <div class="card">
+      <h3>رطوبة التربة</h3>
+      <div class="value" id="soilHumidity">45%</div>
+      <input type="range" id="soilSlider" min="0" max="100" value="45">
+    </div>
+
+  </section>
+
+  <section class="controls">
+
+    <div class="panel">
+      <h2>⚙️ التحكم في النظام</h2>
+
+      <div class="device">
+        <span>المروحة</span>
+        <strong id="fanStatus" class="off">OFF</strong>
+      </div>
+
+      <div class="device">
+        <span>مضخة المياه</span>
+        <strong id="pumpStatus" class="off">OFF</strong>
+      </div>
+
+      <button onclick="updateSystem()">تحديث النظام</button>
+    </div>
+
+    <div class="panel">
+      <h2>🌐 وضع الاتصال</h2>
+
+      <label>
+        <input type="checkbox" id="onlineToggle">
+        محاكاة الاتصال بالإنترنت
+      </label>
+
+      <p style="margin-top:12px;color:#94a3b8">
+        عند الاتصال: محاكاة تحليل سحابي.
+        <br>
+        عند عدم الاتصال: تحليل محلي بسيط.
+      </p>
+    </div>
+
+  </section>
+
+  <section class="panel">
+    <h2>🤖 AI Plant Diagnosis</h2>
+
+    <p>ارفع صورة نبات لمعاينتها داخل النموذج:</p>
+
+    <input type="file" id="imageInput" accept="image/*">
+    <img id="plantImage" alt="Plant preview">
+
+    <button onclick="runAI()">تشغيل التحليل</button>
+
+    <div class="ai-result" id="aiResult">
+      في انتظار التحليل...
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>📋 سجل النظام</h2>
+    <div id="log">تم تشغيل النظام بنجاح.</div>
+  </section>
+
 </div>
 
+<footer>
+  Smart Greenhouse Prototype
+</footer>
+
 <script>
-function updateSystem() {
-    let temp = document.getElementById('tempRange').value;
-    let soil = document.getElementById('soilRange').value;
-    let hum = document.getElementById('humRange').value;
+  const tempSlider = document.getElementById("tempSlider");
+  const airSlider = document.getElementById("airSlider");
+  const soilSlider = document.getElementById("soilSlider");
 
-    document.getElementById('tempVal').innerText = temp;
-    document.getElementById('soilVal').innerText = soil;
-    document.getElementById('humVal').innerText = hum;
+  const temperature = document.getElementById("temperature");
+  const airHumidity = document.getElementById("airHumidity");
+  const soilHumidity = document.getElementById("soilHumidity");
 
-    let pump = document.getElementById('pumpStatus');
-    let fan = document.getElementById('fanStatus');
-    let aiStatus = document.getElementById('aiDiseaseStatus');
+  const fanStatus = document.getElementById("fanStatus");
+  const pumpStatus = document.getElementById("pumpStatus");
 
-    // منطق رطوبة التربة والمضخة
+  const connectionStatus = document.getElementById("connectionStatus");
+  const onlineToggle = document.getElementById("onlineToggle");
+
+  function updateValues() {
+    temperature.textContent = tempSlider.value + "°C";
+    airHumidity.textContent = airSlider.value + "%";
+    soilHumidity.textContent = soilSlider.value + "%";
+
+    updateSystem();
+  }
+
+  function updateSystem() {
+    const temp = Number(tempSlider.value);
+    const soil = Number(soilSlider.value);
+
+    if (temp > 30) {
+      fanStatus.textContent = "ON";
+      fanStatus.className = "on";
+    } else {
+      fanStatus.textContent = "OFF";
+      fanStatus.className = "off";
+    }
+
     if (soil < 30) {
-        pump.className = "status-box status-danger";
-        pump.innerText = "مضخة المياه: تعمل الآن! (التربة جافة < 30%)";
+      pumpStatus.textContent = "ON";
+      pumpStatus.className = "on";
     } else {
-        pump.className = "status-box status-safe";
-        pump.innerText = "مضخة المياه: متوقفة (التربة في المعدل الطبيعي)";
+      pumpStatus.textContent = "OFF";
+      pumpStatus.className = "off";
     }
 
-    // منطق الحرارة والمروحة
-    if (temp > 32) {
-        fan.className = "status-box status-danger";
-        fan.innerText = "مروحة التهوية: تعمل بأقصى سرعة! (حرارة عالية > 32°C)";
+    addLog("تم تحديث حالة النظام");
+  }
+
+  function checkConnection() {
+    if (onlineToggle.checked && navigator.onLine) {
+      connectionStatus.textContent = "حالة الاتصال: Online";
+      connectionStatus.style.color = "#4ade80";
     } else {
-        fan.className = "status-box status-safe";
-        fan.innerText = "مروحة التهوية: متوقفة (درجة الحرارة مستقرة)";
+      connectionStatus.textContent = "حالة الاتصال: Offline";
+      connectionStatus.style.color = "#f87171";
+    }
+  }
+
+  onlineToggle.addEventListener("change", checkConnection);
+
+  tempSlider.addEventListener("input", updateValues);
+  airSlider.addEventListener("input", updateValues);
+  soilSlider.addEventListener("input", updateValues);
+
+  function runAI() {
+    const temp = Number(tempSlider.value);
+    const air = Number(airSlider.value);
+    const soil = Number(soilSlider.value);
+
+    let result = "";
+
+    if (onlineToggle.checked && navigator.onLine) {
+      result = `
+        <strong>Cloud AI Simulation</strong><br>
+        تم اختيار وضع التحليل السحابي التجريبي.<br>
+        درجة الحرارة: ${temp}°C<br>
+        رطوبة الهواء: ${air}%<br>
+        رطوبة التربة: ${soil}%<br>
+        هذه محاكاة وليست اتصالًا فعليًا بخدمة ذكاء اصطناعي.
+      `;
+    } else {
+      result = `
+        <strong>Local AI Simulation</strong><br>
+      `;
+
+      if (temp > 35) {
+        result += "تحذير: درجة الحرارة مرتفعة.<br>";
+      } else {
+        result += "درجة الحرارة ضمن الحدود التجريبية.<br>";
+      }
+
+      if (soil < 30) {
+        result += "التربة تحتاج إلى ري.<br>";
+      } else {
+        result += "رطوبة التربة مناسبة حسب النموذج.<br>";
+      }
+
+      if (air < 30) {
+        result += "رطوبة الهواء منخفضة.<br>";
+      } else {
+        result += "رطوبة الهواء مناسبة حسب النموذج.<br>";
+      }
+
+      result += "<br>التحليل المحلي يعتمد على قواعد بسيطة وليس نموذج تعلم آلي.";
     }
 
-    // نموذج محاكاة تحليل الأمراض بناءً على الظروف البيئية
-    if (hum > 80 && temp > 28) {
-        aiStatus.className = "status-box status-danger";
-        aiStatus.innerText = "⚠️ تحذير AI: تم اكتشاف أعراض 'اللفحة المتأخرة' (Late Blight) بسبب ارتفاع الرطوبة والحرارة!";
-    } else if (soil < 20) {
-        aiStatus.className = "status-box status-danger";
-        aiStatus.innerText = "⚠️ تحذير AI: النبات يعاني من 'إجهاد مائي حاد' (Severe Water Stress)!";
-    } else {
-        aiStatus.className = "status-box status-safe";
-        aiStatus.innerText = "✅ حالة النبات: سليمة تماماً (Healthy Leaf - Confidence: 97.8%)";
+    document.getElementById("aiResult").innerHTML = result;
+
+    addLog("تم تشغيل التحليل التجريبي");
+  }
+
+  document.getElementById("imageInput").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+
+    if (file) {
+      const imageURL = URL.createObjectURL(file);
+
+      const plantImage = document.getElementById("plantImage");
+      plantImage.src = imageURL;
+      plantImage.style.display = "block";
+
+      addLog("تم تحميل صورة النبات للمعاينة");
     }
-}
+  });
+
+  function addLog(message) {
+    const log = document.getElementById("log");
+    const time = new Date().toLocaleTimeString("ar-EG");
+
+    log.innerHTML =
+      `<div>${time} - ${message}</div>` + log.innerHTML;
+
+    localStorage.setItem("greenhouseLog", log.innerHTML);
+  }
+
+  window.addEventListener("online", checkConnection);
+  window.addEventListener("offline", checkConnection);
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+      navigator.serviceWorker.register("./sw.js")
+        .catch(error => {
+          console.log("Service Worker Error:", error);
+        });
+    });
+  }
+
+  updateValues();
+  checkConnection();
 </script>
-<!-- قسم التنبؤ بالمرض والإجهاد المائي الاحتمالي -->
-<div class="card ai-prediction-card" style="margin-top: 20px; padding: 20px; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--accent-green);">
-    <h3>🌿 Edge AI & Disease Probability Diagnostics</h3>
-    <p style="font-size: 14px; opacity: 0.8;">تحليل لحظي لاحتمالية الإصابة بالأمراض والإجهاد المائي:</p>
-    
-    <div style="margin-top: 15px;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-            <span>حالة المرض المتوقعة:</span>
-            <strong id="diseaseStatus" style="color: var(--accent-green);">آمن (Normal)</strong>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-            <span>احتمالية الإصابة (Probability):</span>
-            <strong id="diseaseProb">12%</strong>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-            <span>مستوى الإجهاد المائي (Water Stress):</span>
-            <strong id="waterStressLevel" style="color: #3b82f6);">مثالي (Optimal)</strong>
-        </div>
-    </div>
-    
-    <button onclick="runAiPrediction()" style="margin-top: 15px; width: 100%; padding: 10px; background: var(--accent-green); border: none; color: white; border-radius: 8px; font-weight: bold; cursor: pointer;">
-        تشغيل فحص الذكاء الاصطناعي الاحتمالي (Run AI Analysis)
-    </button>
-</div>
 
-<script>
-function runAiPrediction() {
-    let humidity = Math.floor(Math.random() * (90 - 40) + 40);
-    let temp = Math.floor(Math.random() * (40 - 20) + 20);
-    
-    let probElem = document.getElementById('diseaseProb');
-    let statusElem = document.getElementById('diseaseStatus');
-    let stressElem = document.getElementById('waterStressLevel');
-    
-    let calculatedProb = (humidity > 75 && temp > 28) ? Math.floor(Math.random() * (95 - 75) + 75) : Math.floor(Math.random() * (25 - 5) + 5);
-    
-    probElem.innerText = calculatedProb + "%";
-    
-    if (calculatedProb > 70) {
-        statusElem.innerText = "⚠️ خطر: احتمالية عالية للإصابة (High Risk)";
-        statusElem.style.color = "var(--accent-red)";
-    } else if (calculatedProb > 40) {
-        statusElem.innerText = "⚡ تحذير: إصابة محتملة (Moderate Risk)";
-        statusElem.style.color = "#f59e0b";
-    } else {
-        statusElem.innerText = "✅ آمن - النباتات سليمة (Healthy)";
-        statusElem.style.color = "var(--accent-green)";
-    }
-    
-    if (humidity < 50) {
-        stressElem.innerText = "🚨 إجهاد مائي مرتفع (High Water Stress)";
-        stressElem.style.color = "var(--accent-red)";
-    } else {
-        stressElem.innerText = "💧 رطوبة التربة مثالية (Optimal Moisture)";
-        stressElem.style.color = "var(--accent-green)";
-    }
-}
-</script>
 </body>
 </html>
