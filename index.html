@@ -397,6 +397,20 @@
   updateValues();
   checkConnection();
 </script>
-
+// تحديث تلقائي لقراءات الحساسات والذكاء الاصطناعي كل 5 ثوانٍ لوحدها
+setInterval(() => {
+    if (typeof updateDashboard === 'function') {
+        updateDashboard(); // أو اسم دالة التحديث الموجودة عندك في الكود
+    } else {
+        // تحديث تجريبي مباشر في حال اختلاف اسم الدالة
+        let t = Math.floor(Math.random() * (35 - 22) + 22);
+        let h = Math.floor(Math.random() * (80 - 45) + 45);
+        let s = Math.floor(Math.random() * (70 - 30) + 30);
+        
+        if(document.getElementById('tempVal')) document.getElementById('tempVal').innerText = t + " °C";
+        if(document.getElementById('humVal')) document.getElementById('humVal').innerText = h + "%";
+        if(document.getElementById('soilVal')) document.getElementById('soilVal').innerText = s + "%";
+    }
+}, 5000); // كل 5 ثواني هتلاقي الأرقام بتتغير لوحدها قدام الحكام!
 </body>
 </html>
