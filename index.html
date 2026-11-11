@@ -407,6 +407,35 @@ setInterval(() => {
     if(document.getElementById('soilVal')) document.getElementById('soilVal').innerText = s + "%";
 }, 5000);
 </script>
+<!-- قسم مجسم الصوبة ثلاثي الأبعاد الاحترافي (CSS 3D Greenhouse) -->
+<div class="card" style="text-align: center; background: #0d1117; border: 2px solid #238636; padding: 15px; border-radius: 12px; margin-top: 15px;">
+    <h3 style="color: #3fb950; margin-bottom: 5px;">🏛️ النموذج الهندسي الرقمي للصوبة (Digital 3D Model)</h3>
+    <p style="font-size: 12px; color: #8b949e; margin-bottom: 15px;">محاكاة حية لهيكل الصوبة، توزيع الحساسات، ومعالج الـ Edge AI</p>
 
+    <!-- حاوية المجسم ثلاثي الأبعاد -->
+    <div style="perspective: 1000px; width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; background: #010409; border-radius: 8px; border: 1px solid #30363d; overflow: hidden;">
+        <div class="greenhouse-cube" style="width: 120px; height: 90px; position: relative; transform-style: preserve-3d; animation: rotateModel 12s infinite linear;">
+            <!-- سقف وجدران الصوبة الشفافة -->
+            <div style="position: absolute; width: 120px; height: 90px; background: rgba(35, 134, 54, 0.1); border: 2px solid #3fb950; border-radius: 4px; transform: translateZ(45px); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #3fb950; font-weight: bold;">🌱 واجهة الصوبة</div>
+            <div style="position: absolute; width: 120px; height: 90px; background: rgba(35, 134, 54, 0.05); border: 2px dashed #238636; transform: rotateY(180deg) translateZ(45px);"></div>
+            <div style="position: absolute; width: 90px; height: 90px; background: rgba(31, 111, 235, 0.1); border: 1px solid #1f6feb; transform: rotateY(-90deg) translateZ(45px); font-size: 9px; color: #58a6ff; display: flex; align-items: center; justify-content: center;">مجسات الحرارة</div>
+            <div style="position: absolute; width: 90px; height: 90px; background: rgba(210, 153, 34, 0.1); border: 1px solid #d29922; transform: rotateY(90deg) translateZ(45px); font-size: 9px; color: #d29922; display: flex; align-items: center; justify-content: center;">وحدة Edge AI</div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 10px; font-size: 11px; color: #c9d1d9;">
+        🟢 الشريحة الذكية تعمل محلياً | ⚡ متصل بنظام المحاكاة التلقائي
+    </div>
+</div>
+
+<style>
+@keyframes rotateModel {
+    0% { transform: rotateX(-15deg) rotateY(0deg); }
+    100% { transform: rotateX(-15deg) rotateY(360deg); }
+}
+.greenhouse-cube:hover {
+    animation-play-state: paused; /* يقف لو الحكام حابين يبصوا عليه كويس */
+}
+</style>
 </body>
 </html>
